@@ -122,10 +122,45 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return _.find(postsData, { id: args.id })
             }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parent, args) {
+                return usersData;
+            }
         }
     }
 })
 
+ /* Mutations */
+
+ const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        createUser: {
+            type: UserType,
+            args: {
+                //id: { type: GraphQLID },
+                name: { type: GraphQLString },
+                age: { type: GraphQLInt },
+                profession: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                let user = {
+                    id: usersData.length + 1,
+                    name: args.name,
+                    age: args.age,
+                    profession: args.profession
+                }
+                usersData.push(user)
+                return user;
+            }
+        }
+    }
+ });
+
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 })
