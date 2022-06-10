@@ -128,6 +128,18 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return usersData;
             }
+        },
+        posts:{
+            type: new GraphQLList(PostType),
+            resolve(parent, args) {
+                return postsData;
+            }
+        },
+        hobbies: {
+            type: new GraphQLList(HoobyType),
+            resolve(parent, args) {
+                return hobbiesData;
+            }
         }
     }
 })
