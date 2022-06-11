@@ -1,17 +1,15 @@
 const express = require('express')
-require('dotenv').config();
-const { graphqlHTTP } = require('express-graphql')
-const moongose = require('mongoose')
 const schema = require('./schema/schema')
-const schemaTest = require('./schema/types_schema')
+const { graphqlHTTP } = require('express-graphql')
 const { dbConnection } = require('./config');
+require('dotenv').config();
 
 const app = express()
 
 
 app.use('/graphql', graphqlHTTP({
     graphiql: true,
-    schema: schemaTest
+    schema
 }))
 
 const connectDB = async() => {
