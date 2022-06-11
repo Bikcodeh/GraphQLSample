@@ -1,12 +1,18 @@
-const { default: mongoose } = require('mongoose')
-const mooongose = require('mongoose')
+const mongoose = require('mongoose');
 
 const MSchema = mongoose.Schema;
 
 const userSchema = new MSchema({
-    id: String,
-    age: Number,
-    profession: String
+    name: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number
+    },
+    profession: {
+        type: String
+    }
 })
-
-module.exports = mooongose.model('User', userSchema)
+const User = mongoose.model("user", userSchema, "user")
+module.exports = User;
