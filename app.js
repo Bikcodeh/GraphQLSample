@@ -1,25 +1,7 @@
-const express = require('express')
-const schema = require('./schema/schema')
-const { graphqlHTTP } = require('express-graphql')
-const { dbConnection } = require('./config');
 require('dotenv').config();
+const Server = require('./model/server');
 
-const app = express()
-const port = process.env.PORT || 4000
+const server = new Server();
 
-
-app.use('/graphql', graphqlHTTP({
-    graphiql: true,
-    schema
-}))
-
-const connectDB = async() => {
-    await dbConnection()
-}
-
-connectDB()
-
-
-app.listen(port, () => {
-    console.log(`Server running`)
-})
+server.connectGraphQL()
+server.listen();
