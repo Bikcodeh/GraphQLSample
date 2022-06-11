@@ -5,6 +5,7 @@ const { dbConnection } = require('./config');
 require('dotenv').config();
 
 const app = express()
+const port = process.env.PORT || 4000
 
 
 app.use('/graphql', graphqlHTTP({
@@ -19,6 +20,6 @@ const connectDB = async() => {
 connectDB()
 
 
-app.listen(4000, () => {
-    console.log(`Server running at port 4000`)
+app.listen(port, () => {
+    console.log(`Server running`)
 })
