@@ -1,8 +1,11 @@
 const graphql = require('graphql')
+const { PubSub } = require('graphql-subscriptions')
 const _ = require('lodash')
 const User = require('../model/User')
 const Post = require('../model/Post')
 const Hobby = require('../model/Hobby')
+
+const pubSub = new PubSub();
 
 const {
     GraphQLObjectType,
@@ -133,6 +136,16 @@ const Mutation = new GraphQLObjectType({
                 age: { type: GraphQLInt },
                 profession: { type: GraphQLString }
             },
+            resolve(parent, args) {
+                let user = new User({
+                    name: args.name,
+                    age: args.age,
+                    profession: args.profession
+                })
+                let userSaved = user.save()
+                pubSub.publish('READ_USERS', { readUsers: userSaved });
+                return userSaved
+            }
         },
         updateUser: {
             type: UserType,
@@ -279,9 +292,7 @@ const Subscription = new GraphQLObjectType({
     fields: {
         readUsers : {
             type: UserType,
-            resolve(parent, args) {
-                return User.find({}).exec()
-            }
+            subscribe: () => pubSub.asyncIterator(['READ_USERS'])
         }
     }
 })
