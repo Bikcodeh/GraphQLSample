@@ -33,5 +33,4 @@ dbConnection()
 
 httpServer.listen({ port: PORT || 4000 }, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`GraphQL endpoint: http://localhost:${PORT}/graphql`);
 });
