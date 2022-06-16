@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
 const { useServer } = require('graphql-ws/lib/use/ws')
@@ -6,7 +7,6 @@ const { WebSocketServer } = require('ws')
 const cors = require('cors');
 const schema = require('./schema/schema')
 const { dbConnection } = require('./config');
-require('dotenv').config();
 
 
 const initApollo = async() => {

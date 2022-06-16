@@ -29,14 +29,14 @@ const UserType = new GraphQLObjectType({
         profession: { type: GraphQLString },
         posts: {
             type: new GraphQLList(PostType),
-            resolve(parent, args) {
-                return Post.find({ userId: parent.id })
+            async resolve(parent, args) {
+                return await Post.find({ userId: parent.id })
             }
         },
         hoobies: {
             type: new GraphQLList(HoobyType),
-            resolve(parent, args) {
-                return Hobby.find({ userId: parent.id })
+            async resolve(parent, args) {
+                return await Hobby.find({ userId: parent.id })
             }
         }
     })
@@ -52,8 +52,8 @@ const HoobyType = new GraphQLObjectType({
         description: { type: GraphQLString },
         user: {
             type: UserType,
-            resolve(parent, args) {
-                return User.findById(parent.userId)
+            async resolve(parent, args) {
+                return await User.findById(parent.userId)
             }
         }
     })
@@ -68,8 +68,8 @@ const PostType = new GraphQLObjectType({
         comment: { type: GraphQLString },
         user: {
             type: UserType,
-            resolve(parent, args) {
-                return User.findById(parent.userId)
+            async resolve(parent, args) {
+                return await User.findById(parent.userId)
             }
         }
     })
