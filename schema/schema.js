@@ -83,42 +83,42 @@ const RootQuery = new GraphQLObjectType({
         user: {
             type: UserType,
             args: { id: { type: GraphQLString } },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 //We resolve with data
                 //get and return data from datasource
-                return User.findById(args.id);
+                return await User.findById(args.id);
             }
         },
         hooby: {
             type: HoobyType,
             args: { id: { type: GraphQLID } },
-            resolve(parent, args) {
-                return Hobby.findById(args.id);
+            async resolve(parent, args) {
+                return  await Hobby.findById(args.id);
             }
         },
         post: {
             type: PostType,
             args: { id: { type: GraphQLID } },
-            resolve(parent, args) {
-                return Post.findById(args.id);
+            async resolve(parent, args) {
+                return await Post.findById(args.id);
             }
         },
         users: {
             type: new GraphQLList(UserType),
-            resolve(parent, args) {
-                return User.find({}).exec()
+            async resolve(parent, args) {
+                return await User.find({}).exec()
             }
         },
         posts: {
             type: new GraphQLList(PostType),
-            resolve(parent, args) {
-                return Post.find({}).exec()
+            async resolve(parent, args) {
+                return await Post.find({}).exec()
             }
         },
         hobbies: {
             type: new GraphQLList(HoobyType),
-            resolve(parent, args) {
-                return Hobby.find({}).exec()
+            async resolve(parent, args) {
+                return await Hobby.find({}).exec()
             }
         }
     }
@@ -136,13 +136,13 @@ const Mutation = new GraphQLObjectType({
                 age: { type: GraphQLInt },
                 profession: { type: GraphQLString }
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 let user = new User({
                     name: args.name,
                     age: args.age,
                     profession: args.profession
                 })
-                let userSaved = user.save()
+                let userSaved = await user.save()
                 pubSub.publish('READ_USERS', { readUsers: userSaved });
                 return userSaved
             }
@@ -155,7 +155,7 @@ const Mutation = new GraphQLObjectType({
                 age: { type: GraphQLInt },
                 profession: { type: GraphQLString }
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 return User.findByIdAndUpdate(
                     args.id,
                     {
@@ -175,8 +175,8 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent, args) {
-                let removedUser = User.findByIdAndRemove(args.id).exec();
+            async resolve(parent, args) {
+                let removedUser = await User.findByIdAndRemove(args.id).exec();
                 if(!removedUser) {
                     throw new("Error deleting user")
                 }
@@ -190,12 +190,12 @@ const Mutation = new GraphQLObjectType({
                 comment: { type: GraphQLString },
                 userId: { type: GraphQLID }
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 let post = new Post({
                     comment: args.comment,
                     userId: args.userId
                 })
-                return post.save();
+                return await post.save();
             }
         },
         updatePost: {
@@ -205,8 +205,8 @@ const Mutation = new GraphQLObjectType({
                 comment: { type: GraphQLString },
                 userId: { type: GraphQLID }
             },
-            resolve(parent, args) {
-                return Post.findByIdAndUpdate(
+            async resolve(parent, args) {
+                return await Post.findByIdAndUpdate(
                     args.id,
                     {
                         $set: {
@@ -223,8 +223,8 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent, args) {
-                let removedPost = Post.findByIdAndRemove(args.id).exec();
+            async resolve(parent, args) {
+                let removedPost = await Post.findByIdAndRemove(args.id).exec();
                 if(!removedPost) {
                     throw new("Error deleting post")
                 }
@@ -238,13 +238,13 @@ const Mutation = new GraphQLObjectType({
                 description: { type: GraphQLString },
                 userId: { type: GraphQLID }
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
                 let hobby = new Hobby({
                     title: args.title,
                     description: args.description,
                     userId: args.userId
                 })
-                return hobby.save();
+                return await hobby.save();
             }
 
         },
@@ -256,8 +256,8 @@ const Mutation = new GraphQLObjectType({
                 description: { type: GraphQLString },
                 userId: { type: GraphQLID }
             },
-            resolve(parent, args) {
-                return Hobby.findByIdAndUpdate(
+            async resolve(parent, args) {
+                return await Hobby.findByIdAndUpdate(
                     args.id,
                     {
                         $set: {
@@ -275,8 +275,8 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent, args) {
-                let removedHobby = Hobby.findByIdAndRemove(args.id).exec();
+            async resolve(parent, args) {
+                let removedHobby = await Hobby.findByIdAndRemove(args.id).exec();
                 if(!removedHobby) {
                     throw new("Error deleting hobby")
                 }
