@@ -133,14 +133,6 @@ const Mutation = new GraphQLObjectType({
                 age: { type: GraphQLInt },
                 profession: { type: GraphQLString }
             },
-            resolve(parent, args) {
-                let user = new User({
-                    name: args.name,
-                    age: args.age,
-                    profession: args.profession
-                })
-                return user.save()
-            }
         },
         updateUser: {
             type: UserType,
@@ -281,7 +273,21 @@ const Mutation = new GraphQLObjectType({
     }
 });
 
+
+const Subscription = new GraphQLObjectType({
+    name: 'Subscription',
+    fields: {
+        readUsers : {
+            type: UserType,
+            resolve(parent, args) {
+                return User.find({}).exec()
+            }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
     query: RootQuery,
-    mutation: Mutation
+    mutation: Mutation,
+    subscription: Subscription
 })

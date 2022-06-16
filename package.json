@@ -25,5 +25,8 @@
   },
   "scripts": {
     "start": "node index.js"
+  },
+  "devDependencies": {
+    "apollo": "^2.34.0"
   }
 }
